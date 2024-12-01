@@ -8,7 +8,9 @@
 </head>
 
 <body>
-    hello
+    hello from jsp
+    <h1>${variable}</h1>
+
 </body>
 
 </html>

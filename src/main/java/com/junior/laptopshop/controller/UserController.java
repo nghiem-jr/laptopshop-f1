@@ -1,6 +1,7 @@
 package com.junior.laptopshop.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,9 +12,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserController {
+    private UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping("/")
-    public String getHomePage() {
+    public String getHomePage(Model model) {
+        String value = this.userService.handleHello();
+        model.addAttribute("variable", value);
         return "hello";
     }
 }
