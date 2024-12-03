@@ -1,0 +1,25 @@
+html,
+body {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.component {
+    display: flex;
+    flex-direction: column;
+    font-size: x-large;
+    width: 400px;
+}
+
+.input {
+    /* width: 100%; */
+    display: flex;
+    flex: 1;
+}
+
+.btn {
+    margin-top: 10px;
+    font-size: x-large;
+    width: 100%;
+}
