@@ -13,6 +13,7 @@ import com.junior.laptopshop.service.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -31,21 +32,29 @@ public class UserController {
         return "hello";
     }
 
-    @RequestMapping("/admin/user/create") // GET
+    @RequestMapping("/admin/user")
     public String getUserPage(Model model) {
+        List<User> users = this.userService.getAllUsers();
+        model.addAttribute("users1", users);
+        return "admin/user/table-user";
+    }
+
+    @RequestMapping("/admin/user/{id}")
+    public String getUserDetailPage(Model model, @PathVariable long id) {
+        System.out.println("check id: " + id);
+        model.addAttribute("id", id);
+        return "admin/user/show";
+    }
+
+    @RequestMapping("/admin/user/create") // GET
+    public String getCreateUserPage(Model model) {
         model.addAttribute("newUser", new User());
         return "admin/user/create";
     }
 
-    @RequestMapping("/admin/user")
-    public String display(Model model) {
-        return "admin/user/table-user";
-    }
-
     @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
     public String createUserPage(Model model, @ModelAttribute User junior) {
-        System.out.println("run here" + junior);
         this.userService.handleSaveUser(junior);
-        return "hello";
+        return "redirect:/admin/user";
     }
 }

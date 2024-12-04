@@ -38,36 +38,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>
-                                                <button class="btn btn-success">view</button>
-                                                <button class="btn btn-warning">update</button>
-                                                <button class="btn btn-danger">delete</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Jacob</td>
-                                            <td>Thornton</td>
-                                            <td>
-                                                <button class="btn btn-success">view</button>
-                                                <button class="btn btn-warning">update</button>
-                                                <button class="btn btn-danger">delete</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Larry</td>
-                                            <td>the Bird</td>
-                                            <td>
-                                                <button class="btn btn-success">view</button>
-                                                <button class="btn btn-warning">update</button>
-                                                <button class="btn btn-danger">delete</button>
-                                            </td>
-                                        </tr>
+                                        <c:forEach var="user" items="${users1}">
+                                            <tr>
+                                                <th scope="row">${user.id}</th>
+                                                <td>${user.email}</td>
+                                                <td>${user.fullName}</td>
+                                                <td>
+                                                    <a href="/admin/user/${user.id}" class="btn btn-success">view</a>
+                                                    <button class="btn btn-warning">update</button>
+                                                    <button class="btn btn-danger">delete</button>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
