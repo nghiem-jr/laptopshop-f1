@@ -28,4 +28,8 @@ public class UserService {
         System.out.println(junior);
         return junior;
     }
+
+    public User getUserById(long id) {
+        return this.userRepository.findById(id);
+    }
 }
