@@ -14,6 +14,7 @@ import com.junior.laptopshop.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -63,6 +64,19 @@ public class UserController {
     @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
     public String createUserPage(Model model, @ModelAttribute User junior) {
         this.userService.handleSaveUser(junior);
+        return "redirect:/admin/user";
+    }
+
+    @PostMapping("/admin/user/update")
+    public String postUpdateUser(Model model, @ModelAttribute("newUser") User hoidanit) {
+        User currentUser = this.userService.getUserById(hoidanit.getId());
+        if (currentUser != null) {
+            currentUser.setFullName(hoidanit.getFullName());
+            currentUser.setPhone(hoidanit.getPhone());
+            currentUser.setAddress(hoidanit.getAddress());
+
+            this.userService.handleSaveUser(currentUser);
+        }
         return "redirect:/admin/user";
     }
 }
