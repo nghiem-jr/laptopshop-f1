@@ -68,15 +68,30 @@ public class UserController {
     }
 
     @PostMapping("/admin/user/update")
-    public String postUpdateUser(Model model, @ModelAttribute("newUser") User hoidanit) {
-        User currentUser = this.userService.getUserById(hoidanit.getId());
+    public String postUpdateUser(Model model, @ModelAttribute("newUser") User junior) {
+        User currentUser = this.userService.getUserById(junior.getId());
         if (currentUser != null) {
-            currentUser.setFullName(hoidanit.getFullName());
-            currentUser.setPhone(hoidanit.getPhone());
-            currentUser.setAddress(hoidanit.getAddress());
+            currentUser.setFullName(junior.getFullName());
+            currentUser.setPhone(junior.getPhone());
+            currentUser.setAddress(junior.getAddress());
 
             this.userService.handleSaveUser(currentUser);
         }
+        return "redirect:/admin/user";
+    }
+
+    @GetMapping("/admin/user/delete/{id}")
+    public String getDeleteUserPage(Model model, @PathVariable long id) {
+        User currentUser = this.userService.getUserById(id);
+        model.addAttribute("id", id);
+        model.addAttribute("newUser", currentUser);
+        return "admin/user/delete";
+    }
+
+    @PostMapping("/admin/user/delete")
+    public String postDeleteUser(Model model, @ModelAttribute("newUser") User junior) {
+        User currentUser = this.userService.getUserById(junior.getId());
+        this.userService.deleteUserById(currentUser.getId());
         return "redirect:/admin/user";
     }
 }
