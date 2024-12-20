@@ -2,6 +2,7 @@ package com.junior.laptopshop.controller.admin;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +24,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserController {
     private UserService userService;
     private UploadService uploadService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, UploadService uploadService) {
+    public UserController(PasswordEncoder passwordEncoder, UserService userService, UploadService uploadService) {
         this.userService = userService;
         this.uploadService = uploadService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @RequestMapping("/")
@@ -62,7 +65,11 @@ public class UserController {
     public String createUserPage(Model model, @ModelAttribute User junior,
             @RequestParam("juniorFile") MultipartFile file) {
         String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
-        // this.userService.handleSaveUser(junior);
+        String hashPassword = this.passwordEncoder.encode(junior.getPassword());
+        junior.setAvatar(avatar);
+        junior.setPassword(hashPassword);
+        junior.setRole(this.userService.getRoleByName(junior.getRole().getName()));
+        this.userService.handleSaveUser(junior);
         return "redirect:/admin/user";
     }
 
