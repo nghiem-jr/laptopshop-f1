@@ -7,8 +7,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.junior.laptopshop.domain.User;
+import com.junior.laptopshop.service.UploadService;
 import com.junior.laptopshop.service.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +22,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class UserController {
     private UserService userService;
+    private UploadService uploadService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UploadService uploadService) {
         this.userService = userService;
+        this.uploadService = uploadService;
     }
 
     @RequestMapping("/")
@@ -54,17 +58,19 @@ public class UserController {
         return "admin/user/create";
     }
 
+    @PostMapping(value = "/admin/user/create")
+    public String createUserPage(Model model, @ModelAttribute User junior,
+            @RequestParam("juniorFile") MultipartFile file) {
+        String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
+        // this.userService.handleSaveUser(junior);
+        return "redirect:/admin/user";
+    }
+
     @RequestMapping("/admin/user/update/{id}") // GET
     public String getUpdateUserPage(Model model, @PathVariable long id) {
         User currentUser = this.userService.getUserById(id);
         model.addAttribute("newUser", currentUser);
         return "admin/user/update";
-    }
-
-    @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
-    public String createUserPage(Model model, @ModelAttribute User junior) {
-        this.userService.handleSaveUser(junior);
-        return "redirect:/admin/user";
     }
 
     @PostMapping("/admin/user/update")
