@@ -5,12 +5,16 @@ import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.junior.laptopshop.domain.User;
 import com.junior.laptopshop.service.UploadService;
 import com.junior.laptopshop.service.UserService;
+
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -60,13 +64,28 @@ public class UserController {
     }
 
     @PostMapping(value = "/admin/user/create")
-    public String createUserPage(Model model, @ModelAttribute User junior,
+    public String postUserPage(Model model,
+            @ModelAttribute("newUser") @Valid User junior,
+            BindingResult newUserBindingResult,
             @RequestParam("juniorFile") MultipartFile file) {
+
+        List<FieldError> errors = newUserBindingResult.getFieldErrors();
+        for (FieldError error : errors) {
+            System.out.println(">>>>>>>>>>>>" + error.getField() + " - " + error.getDefaultMessage());
+        }
+
+        // validate
+        if (newUserBindingResult.hasErrors()) {
+            return "admin/user/create";
+        }
+
         String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
         String hashPassword = this.passwordEncoder.encode(junior.getPassword());
         junior.setAvatar(avatar);
         junior.setPassword(hashPassword);
         junior.setRole(this.userService.getRoleByName(junior.getRole().getName()));
+
+        // save
         this.userService.handleSaveUser(junior);
         return "redirect:/admin/user";
     }
