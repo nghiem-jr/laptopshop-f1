@@ -33,7 +33,7 @@ public class User {
     private String fullName;
     private String address;
     @NotNull
-    @Min(value = 2, message = "Số điện thoại tối thiểu 2 chữ số")
+    @Size(min = 2, message = "Số điện thoại tối thiểu 2 chữ số")
     private String phone;
 
     private String avatar;
