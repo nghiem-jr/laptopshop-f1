@@ -2,6 +2,7 @@ package com.junior.laptopshop.domain;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +27,7 @@ public class Product {
     private double price;
     private String image;
     @NotEmpty(message = "Detail description không được để trống")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String detailDesc;
     @NotEmpty(message = "Short description không được để trống")
     private String shortDesc;
